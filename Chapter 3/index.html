@@ -18,6 +18,7 @@
       integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="app.css" />
     <title>VueJS Basic</title>
   </head>
 
@@ -43,22 +44,26 @@
 
       <h1>IDShop</h1>
 
-      <div class="align-items-center" :class="sliderState">
-        <label for="" :class="style.label">Max</label>
-        <input
-          type="text"
-          class="form-control mx-2"
-          :style="{'width': style.inputWidth + 'px', 'text-align': 'center'}"
-          v-model="maximum"
-        />
-        <input
-          type="range"
-          class="custom-range"
-          min="0"
-          max="200"
-          v-model="maximum"
-        />
-      </div>
+      <transition name="fade">
+        <div v-if="style.sliderStatus">
+          <div class="align-items-center" :class="sliderState">
+            <label for="" :class="style.label">Max</label>
+            <input
+              type="text"
+              class="form-control mx-2"
+              :style="{'width': style.inputWidth + 'px', 'text-align': 'center'}"
+              v-model="maximum"
+            />
+            <input
+              type="range"
+              class="custom-range"
+              min="0"
+              max="200"
+              v-model="maximum"
+            />
+          </div>
+        </div>
+      </transition>
 
       <div
         class="row d-flex mb-3 align-items-center"
