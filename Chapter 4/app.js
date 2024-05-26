@@ -76,5 +76,12 @@ var app = new Vue({
         this.cart.push({ product: product, qty: 1 });
       }
     },
+    deleteItem: function (id) {
+      if (this.cart[id].qty > 1) {
+        this.cart[id].qty--;
+      } else {
+        this.cart.splice(id, 1);
+      }
+    },
   },
 });
