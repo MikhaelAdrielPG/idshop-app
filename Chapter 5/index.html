@@ -98,7 +98,11 @@
         </div>
       </transition>
 
-      <product-list :products="products" :maximum="maximum"></product-list>
+      <product-list
+        :products="products"
+        :maximum="maximum"
+        @add="addItem"
+      ></product-list>
     </div>
 
     <script
