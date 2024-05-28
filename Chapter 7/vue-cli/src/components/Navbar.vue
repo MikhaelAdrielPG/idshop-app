@@ -1,39 +1,51 @@
 <template>
   <nav class="navbar navbar-light fixed-top">
-    <div class="navbar-text ml-auto d-flex">
-      <button class="btn btn-sm btn-outline-success" @click="$emit('toggle')">
-        <font-awesome-icon icon="dollar-sign"></font-awesome-icon>
+    <div class="container-fluid d-flex justify-content-end">
+      <!-- Tombol Toggle -->
+      <button
+        class="btn btn-sm btn-outline-success me-2"
+        @click="$emit('toggle')"
+      >
+        <font-awesome-icon icon="dollar-sign" />
       </button>
-      <div class="dropdown ml-2" v-if="cart.length > 0">
+
+      <!-- Dropdown Cart -->
+      <div class="dropdown" v-if="cart.length > 0">
         <button
           class="btn btn-success btn-sm dropdown-toggle"
           id="dropdownCart"
-          data-toggle="dropdown"
+          @click="toggleDropdown"
           aria-haspopup="true"
-          aria-expanded="false"
+          :aria-expanded="dropdownOpen.toString()"
         >
           <span class="badge badge-pill badge-light">{{ cartQty }}</span>
-          <i class="fas fa-shopping-cart mx-2"></i>
-          <font-awesome-icon icon="shopping-cart"></font-awesome-icon>
-          <price :value="Number(cartTotal)"></price>
+          <font-awesome-icon
+            icon="shopping-cart"
+            class="fas fa-shopping-cart mx-2"
+          />
+          <price :value="Number(cartTotal)" />
         </button>
         <div
           class="dropdown-menu dropdown-menu-right"
+          :class="{ show: dropdownOpen }"
           aria-labelledby="dropdownCart"
         >
           <div v-for="(item, index) in cart" :key="index">
             <div class="dropdown-item-text text-nowrap text-right">
-              <span class="badge badge-pill badge-warning align-text-top mr-1">
-                {{ item.qty }}
-              </span>
-              {{ item.product.name }}
-              <b>{{ (item.qty * item.product.price) | currencyFormat }}</b>
-              <a
-                href="#"
-                class="badge badge-danger text-white"
-                @click.stop="$emit('delete', index)"
-                >-</a
+              <span
+                class="badge rounded-pill bg-warning text-dark align-text-top mx-1"
+                >{{ item.qty }}</span
               >
+              <span>{{ item.product.name }}</span>
+              <b class="mx-2">{{
+                (item.qty * item.product.price) | currencyFormat
+              }}</b>
+              <button
+                class="btn badge bg-danger"
+                @click.stop="deleteItem(index)"
+              >
+                -
+              </button>
             </div>
           </div>
         </div>
@@ -49,14 +61,39 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 export default {
   name: 'navbar-component',
   props: ['cart', 'cartQty', 'cartTotal'],
+  data() {
+    return {
+      dropdownOpen: false,
+    }
+  },
   components: {
     Price,
     FontAwesomeIcon,
   },
   filters: {
-    currencyFormat: function (value) {
+    currencyFormat(value) {
       return 'Rp' + Number.parseFloat(value).toFixed(2)
+    },
+  },
+  computed: {
+    // Tambahkan properti yang mengindikasikan apakah keranjang tidak kosong
+    showDropdown() {
+      return this.cart.length > 0
+    },
+  },
+  methods: {
+    toggleDropdown() {
+      this.dropdownOpen = !this.dropdownOpen
+    },
+    deleteItem(index) {
+      this.$emit('delete', index)
     },
   },
 }
 </script>
+
+<style scoped>
+.dropdown-menu-right.show {
+  right: 0;
+}
+</style>
