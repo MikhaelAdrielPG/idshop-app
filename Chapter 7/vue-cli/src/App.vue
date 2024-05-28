@@ -24,10 +24,11 @@
 import ProductList from './components/ProductList.vue'
 import PriceSlider from './components/PriceSlider.vue'
 import Navbar from './components/Navbar.vue'
+import Vue from 'vue'
 
 export default {
   name: 'app',
-  data: function () {
+  data() {
     return {
       maximum: 50,
       products: [],
@@ -66,31 +67,25 @@ export default {
     },
   },
   methods: {
-    toggleSliderStatus: function () {
+    toggleSliderStatus() {
       this.style.sliderStatus = !this.style.sliderStatus
     },
-    addItem: function (product) {
-      let productIndex
-      let productExist = this.cart.filter(function (item, index) {
-        if (item.product.id == Number(product.id)) {
-          productIndex = index
-          return true
-        } else {
-          return false
-        }
-      })
-
-      if (productExist.length) {
-        this.cart[productIndex].qty++
+    addItem(product) {
+      const item = this.cart.find((item) => item.product.id === product.id)
+      if (item) {
+        item.qty++
       } else {
-        this.cart.push({ product: product, qty: 1 })
+        this.cart.push({ product, qty: 1 })
       }
     },
-    deleteItem: function (id) {
-      if (this.cart[id].qty > 1) {
-        this.cart[id].qty--
+    deleteItem(index) {
+      if (this.cart[index].qty > 1) {
+        Vue.set(this.cart, index, {
+          ...this.cart[index],
+          qty: this.cart[index].qty - 1,
+        })
       } else {
-        this.cart.splice(id, 1)
+        this.cart.splice(index, 1)
       }
     },
   },

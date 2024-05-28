@@ -12,7 +12,7 @@
         />
         <input
           type="range"
-          class="custom-range"
+          class="custom-range w-100"
           min="0"
           max="200"
           v-model="maxAmount"
