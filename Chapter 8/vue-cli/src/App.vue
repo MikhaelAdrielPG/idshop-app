@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container mt-5">
+    <h1>Shopme</h1>
     <price-slider
       :sliderStatus="sliderStatus"
       :maximum.sync="maximum"
