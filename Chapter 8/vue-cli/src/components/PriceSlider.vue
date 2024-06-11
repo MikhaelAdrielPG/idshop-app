@@ -2,8 +2,9 @@
   <transition name="fade">
     <div v-if="sliderStatus">
       <div class="align-items-center" :class="sliderState">
-        <label for="" class="font-weight-bold mr-2">Max</label>
+        <label for="maxAmountInput" class="font-weight-bold mr-2">Max</label>
         <input
+          id="maxAmountInput"
           type="number"
           class="form-control mx-2"
           style="width: 60px; text-align: center"
@@ -11,6 +12,7 @@
           @change="$emit('update:maximum', maxAmount)"
         />
         <input
+          id="maxAmountRange"
           type="range"
           class="custom-range w-100"
           min="0"
@@ -28,10 +30,15 @@ export default {
   name: 'price-slider',
   data: function () {
     return {
-      maxAmount: 50,
+      maxAmount: this.maximum || 50, // Inisialisasi maxAmount dengan nilai maximum
     }
   },
   props: ['sliderStatus', 'maximum'],
+  watch: {
+    maximum(newVal) {
+      this.maxAmount = newVal // Perbarui maxAmount jika prop maximum berubah
+    },
+  },
   computed: {
     sliderState: function () {
       return this.sliderStatus ? 'd-flex' : 'd-none'

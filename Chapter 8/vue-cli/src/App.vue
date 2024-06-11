@@ -1,46 +1,39 @@
 <template>
   <div id="app" class="container mt-5">
-    <CheckoutComponent
-      :cart="cart"
-      :cartTotal="cartTotal"
-      @add="addItem"
-      @delete="deleteItem"
-    ></CheckoutComponent>
-    <products
+    <price-slider
+      :sliderStatus="sliderStatus"
+      :maximum.sync="maximum"
+    ></price-slider>
+    <router-view
       :cart="cart"
       :cartQty="cartQty"
       :cartTotal="cartTotal"
       :maximum.sync="maximum"
-      :products="products"
+      :products="filteredProducts"
       :sliderStatus="sliderStatus"
       @toggle="toggleSliderStatus"
       @add="addItem"
       @delete="deleteItem"
-    >
-    </products>
+    ></router-view>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import CheckoutComponent from './components/Checkout.vue'
-import Products from './components/Products.vue'
+import PriceSlider from './components/PriceSlider.vue'
 
 export default {
   name: 'app',
+  components: {
+    PriceSlider,
+  },
   data() {
     return {
       maximum: 50,
       products: [],
       cart: [],
-      style: {
-        sliderStatus: false,
-      },
+      sliderStatus: true,
     }
-  },
-  components: {
-    CheckoutComponent,
-    Products,
   },
   mounted: function () {
     fetch('https://hplussport.com/api/products/order/price')
@@ -64,10 +57,16 @@ export default {
       }
       return qty
     },
+    filteredProducts() {
+      if (this.sliderStatus) {
+        return this.products.filter((product) => product.price <= this.maximum)
+      }
+      return this.products
+    },
   },
   methods: {
     toggleSliderStatus() {
-      this.style.sliderStatus = !this.style.sliderStatus
+      this.sliderStatus = !this.sliderStatus
     },
     addItem(product) {
       const item = this.cart.find((item) => item.product.id === product.id)

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>IDShop</h1>
     <navbar
       :cart="cart"
       :cartQty="cartQty"
@@ -8,7 +7,6 @@
       @toggle-slide="toggleSlider"
       @delete-item="deleteItem"
     ></navbar>
-    <price-slider :sliderStatus="sliderStatus"></price-slider>
     <product-list
       :maximum="maximum"
       :products="products"
@@ -19,7 +17,6 @@
 
 <script>
 import ProductList from './ProductList.vue'
-import PriceSlider from './PriceSlider.vue'
 import Navbar from './Navbar.vue'
 
 export default {
@@ -35,7 +32,6 @@ export default {
   ],
   components: {
     Navbar,
-    PriceSlider,
     ProductList,
   },
   methods: {
